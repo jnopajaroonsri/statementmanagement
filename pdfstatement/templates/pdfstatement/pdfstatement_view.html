@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    {{ statement.description}}
+{% endblock%}
+
+{% block content %}
+    <section>
+        <h1>Statement for {{ statement.period}}</ht>
+    </section>
+
+    <table>
+        <tr>
+            <th>Description</th>
+            <th>Posting Date</th>
+            <th>Category</th>
+            <th>Amount</th>
+        </tr>
+        {% for transaction in transactions %}
+            <tr>
+                <td><h2>
+                        {{ transaction.description }}
+                </h2></td>
+                <td>{{ transaction.postingDate }}</td>
+                <td>
+                    <a href="{% url 'pdfstatement:transaction-update' slug=transaction.slug %}">
+                        {{ transaction.category }}
+                    </a>
+                </td>
+                <td>{{ transaction.amount }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <th>Total</th>
+            <td> {{ statement.amountTotal }} </td>
+    <table>
+{% endblock %}

@@ -1,0 +1,15 @@
+    <table>
+    {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.bankStatement.bankAccount }}</td>
+            <td>{{ transaction.postingDate }}</td>
+            <td>{{ transaction.description }}</td>
+            <td>
+                <a href="{% url 'pdfstatement:transaction-update' slug=transaction.slug %}">
+                    {{ transaction.category }}
+                </a>
+            </td>
+            <td>{{ transaction.amount }}</td>
+        </tr>
+    {% endfor %}
+    </table>

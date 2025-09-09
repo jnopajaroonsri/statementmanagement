@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Transactions Category Change
+{% endblock%}
+
+{% block content %}
+    <section>
+    <h1>Transaction Category</h1>
+        <form class="form-with-validation" id="changecategoriesForm" changecategoriestransactions-url="{% url 'pdfstatement:ajax_load_changecategoriestransactions' %}" method="POST" action="{% url 'pdfstatement:change-categories' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+                <select name="category_from" required id="id_category_from">
+                {% for category in categories %}
+                    <option value="{{ category.pk }}">{{ category.categoryName}}</option>
+                {% endfor %}
+                </select>
+
+                <select name="category_to" required id="id_category_to">
+                {% for category in categories %}
+                    <option value="{{ category.pk }}">{{ category.categoryName}}</option>
+                {% endfor %}
+                </select>
+            <button type="submit">Update</button>
+        </form>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+            $("#id_category_from").change(function () {
+            var url = $("#changecategoriesForm").attr("changecategoriestransactions-url");  // get the url of the `load_cities` view
+            var categoryFromId = $(this).val();  // get the selected country ID from the HTML input
+
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                'categoryFromId': categoryFromId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                $("#id_transactions").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+            });
+
+            });
+        </script>
+    </section>
+    <section>
+    Transactions::
+    <div id="id_transactions">
+        {% include "pdfstatement/pdfstatement_change_categories_transactions.html" %}
+    </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% if not pdfparserversions %}
+    <option value="">---------</option>
+{% endif %}
+
+{% for parserversion in pdfparserversions %}
+    {% if parserversion.version == selectedversion %}
+        <option value="{{ parserversion.pk }}" selected>{{ parserversion.version }}</option>
+    {% else %}
+        <option value="{{ parserversion.pk }}">{{ parserversion.version }}</option>
+    {% endif %}
+{% endfor %}

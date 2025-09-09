@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+            Django App
+        {% endblock %}
+    </title>
+    <script src="{% static 'js/main.js' %}" defer></script>
+    <link rel="icon" type="image/png" href="{% static 'img/favicon-32x32.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav>
+        <a href="/">
+            <span role="img" aria-label="Home" title="Home">🏠</span>
+        </a> | 
+        <a href="/about">
+            <span role="img" aria-label="About" title="About">😃</span>
+        </a> | 
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'pdfstatement:list' %}">
+                <span role="img" aria-label="Statements" title="Statements">💳Statements</span>
+            </a> |
+            <a href="{% url 'pdfstatement:transactions-list' %}">
+                <span role="img" aria-label="Transactions" title="Transactions">💳Transactions</span>
+            </a> |
+            <a href="{% url 'pdfstatement:new-statement' %}">
+                <span role="img" aria-label="New Statement" title="New Statement">💳New Statement</span>
+            </a> |
+            <a href="{% url 'pdfstatement:change-categories' %}">
+                <span role="img" aria-label="Change Categories" title="Change Categories">💳Change Categories</span>
+            </a> |
+            <a href="{% url 'pdfstatement:chat' %}">
+                <span role="img" aria-label="ChatGPT" title="ChatGPT">💬ChatGPT</span>
+            </a> |
+            <a href="{% url 'pdfstatement:chatbot-view' %}">
+                <span role="img" aria-label="Gemini" title="Gemini">💬Gemini</span>
+            </a> |
+            <a href="{% url 'posts:list' %}">
+                <span role="img" aria-label="Posts" title="Posts">📰</span>
+            </a> |
+            <a href="{% url 'posts:new-post' %}">
+                <span role="img" aria-label="New Post" title="New Post">🆕</span>
+            </a> |
+            <form class="logout" action="{% url 'users:logout' %}" method="post">
+                {% csrf_token %}
+                <button class="logout-button" aria-label="User Logout" title="User Logout">👋</button>
+            </form>
+        {% else %}
+            <a href="{% url 'users:register' %}">
+                <span role="img" aria-label="User Registration" title="User Registration">🚀</span>
+            </a> |
+            <a href="{% url 'users:login' %}">
+                <span role="img" aria-label="User Login" title="User Login">🔒</span>
+            </a>
+        {% endif %}
+    </nav>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>

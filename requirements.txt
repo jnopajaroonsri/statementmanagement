@@ -1,0 +1,10 @@
+django-filter
+openai
+pdfreader
+pillow
+PyPDF2
+google-generativeai
+
+django-crispy-forms
+django-select2
+crispy-bootstrap5

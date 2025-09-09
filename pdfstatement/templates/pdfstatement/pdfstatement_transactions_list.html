@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Transactions
+{% endblock%}
+
+{% block content %}
+    <section>
+    <h1>Transactions</h1>
+        <form method="get">
+            {{ filter_form.form.as_p }}
+            <button type="submit">Search</button>
+        </form>
+    <table>
+    <tr><th>Account</th><th>Posting Date</th><th>Description</th><th>Category</th><th>Amount</th></tr>
+    {% for transaction in filter %}
+        <tr>
+            <td>{{ transaction.bankStatement.bankAccount }}</td>
+            <td>{{ transaction.postingDate }}</td>
+            <td>{{ transaction.description }}</td>
+            <td>
+                <a href="{% url 'pdfstatement:transaction-update' slug=transaction.slug %}">
+                    {{ transaction.category }}
+                </a>
+            </td>
+            <td>{{ transaction.amount }}</td>
+        </tr>
+    {% endfor %}
+    {% if filter.has_previous or filter.has_next %}
+        <tr>
+            <td></td><td></td><td></td><th>Page Total</th><td>{{ pageTotalAmount }}</td>
+        </tr>
+    {% endif %}
+    <tr>
+        <td></td><td></td><td></td><th>Total</th><td>{{ totalAmount }}</td>
+    </tr>
+    </table>
+    </section>
+
+    {% if filter.has_previous %}
+        <a href="{% querystring page=filter.previous_page_number %}">« Previous page</a>
+
+        {% if filter.number > 3 %}
+            <a href="{% querystring page=1 %}">1</a>
+            {% if filter.number > 4 %}
+            <span>...</span>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% for num in filter.paginator.page_range %}
+        {% if filter.number == num %}
+            <a href="{% querystring page=num %}">{{ num }}</a>
+        {% elif num > filter.number|add:'-3' and num < filter.number|add:'3' %}
+            <a href="{% querystring page=num %}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if filter.has_next %}
+        {% if filter.number < filter.paginator.num_pages|add:'-3' %}
+            <span>...</span>
+            <a href="{% querystring page=filter.paginator.num_pages %}">{{ filter.paginator.num_pages }}</a>
+        {% elif filter.number < filter.paginator.num_pages|add:'-2' %}
+            <a href="{% querystring page=filter.paginator.num_pages %}">{{ filter.paginator.num_pages }}</a>
+        {% endif %}
+
+        <a href="{% querystring page=filter.next_page_number %}">Next Page »</a>
+    {% endif %}
+{% endblock %}

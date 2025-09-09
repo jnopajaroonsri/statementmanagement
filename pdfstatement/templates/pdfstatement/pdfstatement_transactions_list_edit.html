@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Transactions
+{% endblock%}
+
+{% block content %}
+    <section>
+    <h1>Transactions</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <div class="form-row field-updateAll">
+                <div class="flex-container checkbox-row">
+                    <input type="checkbox" name="updateAll" id="id_updateAll"><label class="vCheckboxLabel" for="id_updateAll">Update All</label>
+                </div>
+            </div>
+            <button type="submit">Update</button>
+        </form>
+    </section>
+    <button id="openPopupBtn">
+        <img src="/static/admin/img/icon-addlink.svg" alt="" width="24" height="24">
+    </button>
+    <div id="myPopup" class="popup-overlay">
+        <!-- Content will be loaded here by JavaScript -->
+    </div>
+    <script>
+        document.getElementById('openPopupBtn').addEventListener('click', function() {
+            // Get the URL for the popup content using the Django URL tag
+            var popupUrl = "{% url 'pdfstatement:category-add' %}";
+
+            // Use fetch or XMLHttpRequest to load the content
+            fetch(popupUrl)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('myPopup').innerHTML = data;
+                    document.getElementById('myPopup').style.display = 'block'; // Show the popup
+                });
+        });
+
+        // Add event listener for closing the popup
+        document.getElementById('myPopup').addEventListener('click', function(event) {
+            if (event.target.classList.contains('close-popup') || event.target.id === 'myPopup') {
+                document.getElementById('myPopup').style.display = 'none';
+            }
+        });
+    </script>
+
+    <style>
+        /* Basic CSS for the popup */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .popup-inner {
+            background-color: black;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+{% endblock %}

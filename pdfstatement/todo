@@ -1,0 +1,15 @@
+--Reduce n update queries
+--Fix pdf parsers to create transaction records in 1 commit
+--Add category modification on transactions page
+Add ability to add new Category
+Add many to many categories to transactions
+--Add dynamic transaction loading to category conversions
+--Add statement filter for transactions
+--Add Categories filter for transactions
+--Add Categorized boolean field to BankStatement
+Suppress Online Payment transactions
+--Add code for parser version selection
+--Add pagination to transactions
+--Add pagination to statements
+--Add filtering to statements
+Add logging

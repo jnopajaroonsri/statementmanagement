@@ -1,0 +1,10 @@
+    <!-- myapp/popup_template.html -->
+    <div class="popup-inner">
+        <h2>New Category</h2>
+        <form action='{% url 'pdfstatement:category-add' %}' method='POST' class='form-with-validation'>
+            {% csrf_token %}
+            <input id='id_categoryName' type='text' name="categoryName">
+            <p>{{ message }}</p>
+            <button class="close-popup" type='submit'>Add Category</button>
+        </form>
+    </div>

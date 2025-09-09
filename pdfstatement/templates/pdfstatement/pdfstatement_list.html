@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Statements
+{% endblock%}
+
+{% block content %}
+    <section>
+    <h1>Statements</h1>
+        <form method="get">
+            {{ filter_form.form.as_p }}
+            <button type="submit">Search</button>
+        </form>
+    {% for statement in statements %}
+        <article class="post">
+            <h2>
+                <a href="{% url 'pdfstatement:view' slug=statement.slug %}">
+                    {{ statement.bankAccount.bank.bankName }} {{ statement.bankAccount.accountNumber }} - {{ statement.period}}
+                </a>
+            </h2>
+            <p>
+                {{ statement.description }}
+                {% if not statement.categorizedByAI %}
+                    <button type="submit" value={{statement.slug}} onclick="location.href='{% url 'pdfstatement:categorize-transactions' statement.slug  %}'" name='categorize'>Categorize</button>
+                {% endif %}
+            </p>
+        </article>
+    {% endfor %}
+    </section>
+    <section>
+        <div >
+            <span class="step-links">
+            {% if statements.has_previous %}
+            <a href="{% querystring page=statements.previous_page_number %}"><span style="font-size:30px;float:left;" class="glyphicon glyphicon-arrow-left"> Previous</span></a>
+            {% endif %}
+            {% if statements.has_next %}
+            <a href="{% querystring page=statements.next_page_number %}"> <span style="font-size:30px;float:right;" class="glyphicon glyphicon-arrow-right">Next </span></a>
+            {% endif %}
+            </span>
+        </div>
+    </section>
+{% endblock %}

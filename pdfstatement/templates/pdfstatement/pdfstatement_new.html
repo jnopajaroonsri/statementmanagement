@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    New Statement
+{% endblock%}
+
+{% block content %}
+    <section>
+        <h1>New Statement</h1>
+
+        <form class="form-with-validation" id="pdfstatementForm" pdfstatementversions-url="{% url 'pdfstatement:ajax_load_pdfparserversions' %}" action="{% url 'pdfstatement:new-statement' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <button class="form-submit">Add Statement</button>
+        </form>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script>
+            $("#id_bankAccount").change(function () {
+            var url = $("#pdfstatementForm").attr("pdfstatementversions-url");  // get the url of the `load_cities` view
+            var bankAccountId = $(this).val();  // get the selected country ID from the HTML input
+
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                data: {
+                'bankAccount': bankAccountId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                $("#id_pdfParserVersion").html(data);  // replace the contents of the city input with the data that came from the server
+                }
+            });
+
+            });
+        </script>
+    </section>
+{% endblock %}
